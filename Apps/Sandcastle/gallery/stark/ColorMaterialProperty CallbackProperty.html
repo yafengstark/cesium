@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="description" content="Draw a box.">
+    <meta name="cesium-sandcastle-labels" content="Stark">
+    <title>Cesium Demo</title>
+    <script type="text/javascript" src="../Sandcastle-header.js"></script>
+    <script type="text/javascript" src="../../../Build/CesiumUnminified/Cesium.js" nomodule></script>
+    <script type="module" src="../load-cesium-es6.js"></script>
+</head>
+<body class="sandcastle-loading" data-sandcastle-bucket="bucket-requirejs.html">
+<style>
+    @import url(../templates/bucket.css);
+</style>
+<div id="cesiumContainer" class="fullSize"></div>
+<div id="loadingOverlay"><h1>Loading...</h1></div>
+<div id="toolbar"></div>
+<script id="cesium_sandcastle_script">
+    function startup(Cesium) {
+        'use strict';
+//Sandcastle_Begin
+        var viewer = new Cesium.Viewer('cesiumContainer');
+
+
+
+        function getColorMaterialProperty() {
+
+
+//            一个 Property ，其值从提供了一组样本以及指定的插值算法和度。
+            var colorProperty = new Cesium.SampledProperty(Cesium.Color);
+
+            var now = Cesium.JulianDate.fromDate(new Date());
+
+            colorProperty.addSample(Cesium.JulianDate.addSeconds(now, -3, Cesium.JulianDate.fromDate(new Date())),
+                Cesium.Color.BLUE);
+
+            colorProperty.addSample(Cesium.JulianDate.addSeconds(now, 3, Cesium.JulianDate.fromDate(new Date())),
+                Cesium.Color.RED);
+
+            var colorMaterialProperty = new Cesium.ColorMaterialProperty(colorProperty);
+            return colorMaterialProperty;
+        }
+
+
+
+
+        var blueBox = viewer.entities.add({
+            name: 'Blue box',
+            position: Cesium.Cartesian3.fromDegrees(-114.0, 40.0, 300000.0),
+            box: {
+                dimensions: new Cesium.Cartesian3(400000.0, 300000.0, 500000.0),
+//                material: getColorMaterialProperty()
+            }
+        });
+
+
+        var alpha = 0.3
+        var sign = 1
+        var property = new Cesium.CallbackProperty(function (time, result) {
+
+            alpha +=0.01
+            if(alpha >1){
+                alpha = 0
+            }
+
+            return (Cesium.Color.RED.withAlpha(alpha));
+        }, false);
+        blueBox.box.material = new Cesium.ColorMaterialProperty(property);
+
+
+        viewer.zoomTo(viewer.entities);
+//Sandcastle_End
+        Sandcastle.finishedLoading();
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        startup(Cesium);
+    }
+</script>
+</body>
+</html>

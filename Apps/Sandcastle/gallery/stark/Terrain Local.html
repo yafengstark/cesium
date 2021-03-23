@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+    <meta name="description" content="Draw a box.">
+    <meta name="cesium-sandcastle-labels" content="Stark">
+    <title>Cesium Demo</title>
+    <script type="text/javascript" src="../Sandcastle-header.js"></script>
+    <script type="text/javascript" src="../../../Build/CesiumUnminified/Cesium.js" nomodule></script>
+    <script type="module" src="../load-cesium-es6.js"></script>
+</head>
+<body class="sandcastle-loading" data-sandcastle-bucket="bucket-requirejs.html">
+<style>
+    @import url(../templates/bucket.css);
+</style>
+<div id="cesiumContainer" class="fullSize"></div>
+<div id="loadingOverlay"><h1>Loading...</h1></div>
+<div id="toolbar"></div>
+<script id="cesium_sandcastle_script">
+    function startup(Cesium) {
+        'use strict';
+//Sandcastle_Begin
+
+//        var terrainLayer = new Cesium.CesiumTerrainProvider({
+//            url: "http://localhost:6666/terrain_tiles",
+//            requestVertexNormals: true,  // 请求照明
+//            requestWaterMask: true   // 请求水波纹效果
+//        });
+
+//        var geeMetadata = new Cesium.GoogleEarthEnterpriseMetadata('http://www.earthenterprise.org/3d');
+//        var gee = new Cesium.GoogleEarthEnterpriseTerrainProvider({
+//            metadata : geeMetadata
+//        });
+
+
+        var viewer = new Cesium.Viewer('cesiumContainer', {
+            // 无地形状态
+            imageryProvider: new Cesium.UrlTemplateImageryProvider({
+                url: "http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali"
+            }),
+//            terrainProvider:
+        });
+
+
+        // 最关键的还是影像发布的时候，设置头信息Content-Type：application/octet-stream
+        // 'Content-Encoding': 'gzip'
+
+        var terrainLayer = new Cesium.CesiumTerrainProvider({
+            url: "http://localhost:8092/terrain",
+        });
+        viewer.terrainProvider = terrainLayer
+
+
+        //
+
+        viewer.camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(103.5, 25.3, 1000.0)
+        });
+
+
+//        flyPromise.then(function () {
+//            var google = new Cesium.UrlTemplateImageryProvider({
+//                url: "http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali"
+//            })
+//            viewer.imageryLayers.addImageryProvider(google);
+//
+//            var terrainLayer = new Cesium.CesiumTerrainProvider({
+//                url: "http://localhost/terrain_tiles",
+//            });
+//            viewer.terrainProvider = terrainLayer
+//        });
+//
+
+
+//Sandcastle_End
+        Sandcastle.finishedLoading();
+    }
+
+    if (typeof Cesium !== 'undefined') {
+        window.startupCalled = true;
+        startup(Cesium);
+    }
+</script>
+</body>
+</html>
